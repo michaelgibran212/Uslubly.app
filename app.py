@@ -1,3 +1,4 @@
+import os
 import json
 import html
 import streamlit as st
@@ -119,7 +120,6 @@ st.markdown("""
 col_logo, col_title = st.columns([1, 8])
 
 with col_logo:
-    # width=65 mengunci ukuran gambar agar pas sebagai logo ikon
     st.image("logo.png", width=100)
 
 with col_title:
@@ -130,11 +130,12 @@ with col_title:
 # 2. Sidebar Pengaturan Mode
 st.sidebar.header("⚙️ Pengaturan Mode Analisis")
 
-if "api_key" not in st.session_state:
-    st.session_state["api_key"] = ""
+# MENGAMBIL API KEY DARI SECRETS STREAMLIT / ENV AUTOMATIS
+api_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
 
-api_key = st.sidebar.text_input("Masukkan Gemini API Key Anda:", value=st.session_state["api_key"], type="password")
-st.session_state["api_key"] = api_key
+# Opsi Cadangan Manual di Sidebar (Hanya tampil jika Secrets Streamlit tidak terdeteksi)
+if not api_key:
+    api_key = st.sidebar.text_input("Masukkan Gemini API Key Anda:", type="password")
 
 uslub_mode = st.sidebar.radio(
     "Pilih Mode Uslub (Gaya Bahasa):",
@@ -183,7 +184,7 @@ user_text = st.text_area("Masukkan Teks Bahasa Arab Akademik di Sini:", height=1
 # 5. Eksekusi Analisis
 if st.button("🔍 Menganalisis Teks"):
     if not api_key:
-        st.error("⚠️ Masukkan API Key Anda di sidebar sebelah kiri!")
+        st.error("⚠️ API Key belum dikonfigurasi di Streamlit Secrets. Masukkan API Key di sidebar atau di pengaturannya!")
     elif not user_text.strip():
         st.warning("⚠️ Masukkan teks Arab terlebih dahulu.")
     elif "Tahap Pengembangan" in uslub_mode:
@@ -194,7 +195,6 @@ if st.button("🔍 Menganalisis Teks"):
                 client = genai.Client(api_key=api_key)
                 prompt_input = f"Gunakan Harakat Lengkap: {enable_tashkil}\nTeks Asli:\n{user_text}"
                 
-                # Penyesuaian nama model standar Google GenAI
                 response = client.models.generate_content(
                     model='gemini-2.5-flash',
                     contents=prompt_input,
@@ -243,6 +243,6 @@ if st.button("🔍 Menganalisis Teks"):
             except Exception as e:
                 st.error(f"Terjadi kesalahan saat memproses data: {e}")
 
-# 6. Credit Line Footer (Minimalis & Elegan)
+# 6. Credit Line Footer
 st.markdown("---")
 st.markdown('<div class="app-footer">© 2026 Uslubly • Ahmad Zakaria</div>', unsafe_allow_html=True)

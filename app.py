@@ -123,26 +123,23 @@ def get_base64_gif(gif_path):
     return base64.b64encode(data).decode("utf-8")
 
 # ---------------------------------------------------------
-# Header Ringkas: Logo Animasi GIF (Base64) + Deskripsi
+# Header Vertikal: Logo Animasi GIF di Atas, Teks di Bawah
 # ---------------------------------------------------------
-col_logo, col_desc = st.columns([2, 5])
+try:
+    # Membaca file logo_animasi.gif dari root folder repositori
+    gif_base64 = get_base64_gif("logo_animasi.gif")
+    st.markdown(
+        f'<img src="data:image/gif;base64,{gif_base64}" width="220">',
+        unsafe_allow_html=True
+    )
+except Exception:
+    # Cadangan jika file GIF tidak ditemukan
+    st.image("logo.png", width=220)
 
-with col_logo:
-    try:
-        # Membaca file logo_animasi.gif dari root folder repositori
-        gif_base64 = get_base64_gif("logo_animasi.gif")
-        st.markdown(
-            f'<img src="data:image/gif;base64,{gif_base64}" width="180">',
-            unsafe_allow_html=True
-        )
-    except Exception:
-        # Cadangan jika file GIF tidak ditemukan
-        st.image("logo.png", width=180)
-
-with col_desc:
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.caption("✨ **Pengecek Tata Bahasa & Uslub Arab Akademik**")
-    st.write("Sempurnakan tata bahasa, imla', dan mufradat karya ilmiah Anda secara otomatis.")
+# Teks keterangan diletakkan langsung di bawah logo
+st.caption("✨ **Pengecek Tata Bahasa & Uslub Arab Akademik**")
+st.write("Sempurnakan tata bahasa, imla', dan mufradat karya ilmiah Anda secara otomatis.")
+st.markdown("---")
 # ---------------------------------------------------------
 
 # 2. Sidebar Pengaturan Mode

@@ -6,7 +6,7 @@ from google import genai
 from google.genai import types
 
 # 1. Konfigurasi Halaman & CSS Presisi
-st.set_page_config(page_title="Uslubly - Pengecek Arab Akademik", layout="wide")
+st.set_page_config(page_title="Uslubly - Pengecek Teks Arab Akademik", layout="wide")
 
 st.markdown("""
     <style>
@@ -115,16 +115,19 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# Re-branding Header Utama dengan Logo Kecil & Proporsional
+# Header Ringkas: Logo Animasi + Sub-Judul Tanpa Teks Judul
 # ---------------------------------------------------------
-col_logo, col_title = st.columns([1, 8])
+col_logo, col_desc = st.columns([2, 5])
 
 with col_logo:
-    st.image("logo.png", width=100)
+    # Memasang logo animasi sebagai penjelas identitas utama
+    st.image("logo_animasi.gif", width=180)
 
-with col_title:
-    st.title("Uslubly")
-    st.caption("Pengecek Tata Bahasa Arab Akademik Berbasis Uslub Ilmi")
+with col_desc:
+    # Hanya menampilkan deskripsi fungsi aplikasi agar hemat ruang
+    st.markdown("<br>", unsafe_allow_html=True) # Jarak sejajar vertikal
+    st.caption("✨ **Pengecek Tata Bahasa & Uslub Arab Akademik**")
+    st.write("Sempurnakan tata bahasa, imla', dan mufradat karya ilmiah Anda secara otomatis.")
 # ---------------------------------------------------------
 
 # 2. Sidebar Pengaturan Mode
@@ -196,7 +199,7 @@ if st.button("🔍 Menganalisis Teks"):
                 prompt_input = f"Gunakan Harakat Lengkap: {enable_tashkil}\nTeks Asli:\n{user_text}"
                 
                 response = client.models.generate_content(
-                    model='gemini-2.5-flash',
+                    model='gemini-3.6-flash',
                     contents=prompt_input,
                     config=types.GenerateContentConfig(
                         system_instruction=SYSTEM_PROMPT,

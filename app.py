@@ -260,15 +260,24 @@ if st.button("🔍 Menganalisis Teks"):
             except Exception as e:
                 st.error(f"Terjadi kesalahan saat memproses data: {e}")
                 # ---------------------------------------------------------
+## ---------------------------------------------------------
+# Sidebar Kiri: Survei Kepuasan & Kotak Saran (Versi Ringkas)
 # ---------------------------------------------------------
-# Sidebar Kiri: Survei Kepuasan & Kotak Saran (Paling Bawah)
-# ---------------------------------------------------------
-st.sidebar.markdown("---")  # Garis pemisah rapi di sidebar
+st.sidebar.markdown("---")
 
-st.sidebar.info(
-    "⭐ **Bantu Kami Mengembangkan Uslubly!**\n\n"
-    "Bagaimana penglaman anda? Berikan penilaian & saran Anda melalui:\n\n"
-    "👉 [**Survei Kepuasan & Kotak Saran**](PASTE_LINK_GOOGLE_FORM_ANDA_DI_SINI)"
+st.sidebar.markdown(
+    """
+    <div style="background-color: #f0f7f4; padding: 10px; border-radius: 8px; border-left: 4px solid #1b5e20;">
+        <p style="margin: 0; font-size: 13px; font-weight: bold; color: #1b5e20;">
+            ⭐ Survei & Kotak Saran
+        </p>
+        <p style="margin: 4px 0 0 0; font-size: 12px; color: #555555;">
+            Bantu kami mengembangkan Uslubly.<br>
+            👉 <a href="https://forms.gle/DoAJD4pdNMd1eK9Z8" target="_blank" style="color: #1b5e20; font-weight: bold; text-decoration: underline;">Isi Form di Sini</a>
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
 # 6. Credit Line Footer

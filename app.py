@@ -259,7 +259,17 @@ if st.button("🔍 Menganalisis Teks"):
 
             except Exception as e:
                 st.error(f"Terjadi kesalahan saat memproses data: {e}")
+                # ---------------------------------------------------------
+# Survei Kepuasan & Kotak Saran (Google Form)
+# ---------------------------------------------------------
+st.divider()
+
+st.info(
+    "⭐ **Bantu Kami Mengembangkan Uslubly!**\n\n"
+    "Bagaimana pengalaman Anda menggunakan Uslubly? Berikan penilaian dan saran Anda melalui "
+    "[**Survei Kepuasan & Kotak Saran Uslubly**](https://forms.gle/i53B72fqNEB7PCJx8)."
+)
 
 # 6. Credit Line Footer
 st.markdown("---")
-st.markdown('<div class="app-footer">© 2026 Uslubly • Ahmad Zakaria</div>', unsafe_allow_html=True)
+st.markdown('<div class="app-footer">© 2026 Uslubly • Ahmad Zakaria • BSA UIN Sunan Kalijaga</div>', unsafe_allow_html=True)

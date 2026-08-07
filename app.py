@@ -26,12 +26,18 @@ if not is_admin:
     st.markdown(
         """
         <style>
-        /* Sembunyikan hanya ikon/link yang menuju ke GitHub */
-        a[href*="github.com"] {
+        /* Sembunyikan kontainer tombol aksi kanan atas (termasuk GitHub) */
+        div[data-testid="stAppDeployButton"] {
             display: none !important;
         }
-        /* Sembunyikan tombol Star/Fork GitHub bawaan Streamlit (jika ada) */
-        button[title*="GitHub"], a[title*="GitHub"] {
+        div[data-testid="stToolbar"] a {
+            display: none !important;
+        }
+        /* Menyasar tombol GitHub khusus di header Streamlit */
+        header [data-testid="stActionButtonIcon"] {
+            display: none !important;
+        }
+        header button[title*="View source"], header a[href*="github"] {
             display: none !important;
         }
         </style>

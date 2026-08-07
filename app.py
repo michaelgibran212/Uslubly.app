@@ -115,17 +115,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# Header Ringkas: Logo Animasi + Sub-Judul Tanpa Teks Judul
+# Header Ringkas: Logo Animasi GIF (HTML Render) + Deskripsi
 # ---------------------------------------------------------
 col_logo, col_desc = st.columns([2, 5])
 
 with col_logo:
-    # Memasang logo animasi sebagai penjelas identitas utama
-    st.image("logo_animasi.gif", width=180)
+    # Menggunakan HTML img agar GIF dipaksa berputar terus di browser
+    st.markdown(
+        '<img src="app/static/logo_animasi.gif" width="180">', 
+        unsafe_allow_html=True
+    )
+    # ATAU jika file GIF ada di folder utama repositori:
+    # st.image("logo_animasi.gif", width=180)
 
 with col_desc:
-    # Hanya menampilkan deskripsi fungsi aplikasi agar hemat ruang
-    st.markdown("<br>", unsafe_allow_html=True) # Jarak sejajar vertikal
+    st.markdown("<br>", unsafe_allow_html=True)
     st.caption("✨ **Pengecek Tata Bahasa & Uslub Arab Akademik**")
     st.write("Sempurnakan tata bahasa, imla', dan mufradat karya ilmiah Anda secara otomatis.")
 # ---------------------------------------------------------

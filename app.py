@@ -123,23 +123,25 @@ def get_base64_gif(gif_path):
     return base64.b64encode(data).decode("utf-8")
 
 # ---------------------------------------------------------
-# Header Vertikal: Logo Animasi GIF di Atas, Teks di Bawah
+# Header Utama: Logo GIF Tengah Atas & Hirarki Teks
 # ---------------------------------------------------------
 try:
-    # Membaca file logo_animasi.gif dari root folder repositori
     gif_base64 = get_base64_gif("logo_animasi.gif")
-    st.markdown(
-        f'<img src="data:image/gif;base64,{gif_base64}" width="220">',
-        unsafe_allow_html=True
-    )
+    logo_html = f'<img src="data:image/gif;base64,{gif_base64}" width="300" style="display: block; margin: 0 auto;">'
 except Exception:
-    # Cadangan jika file GIF tidak ditemukan
-    st.image("logo.png", width=220)
+    logo_html = '<h1 style="text-align: center; color: #2e7d32;">Uslubly</h1>'
 
-# Teks keterangan diletakkan langsung di bawah logo
-st.caption("✨ **Pengecek Tata Bahasa & Uslub Arab Akademik**")
-st.write("Sempurnakan tata bahasa, imla', dan mufradat karya ilmiah Anda secara otomatis.")
-st.markdown("---")
+st.markdown(f"""
+    <div style="text-align: center; padding-bottom: 10px;">
+        {logo_html}
+        <h3 style="margin-top: 15px; margin-bottom: 5px; color: #1b5e20; font-weight: 700; font-size: 22px;">
+            ✨ Pengecek Tata Bahasa & Uslub Arab Akademik
+        </h3>
+        <p style="color: #666666; font-size: 15px; margin-top: 0;">
+            Sempurnakan tata bahasa, imla', dan mufradat karya ilmiah Anda secara otomatis.
+        </p>
+    </div>
+""", unsafe_allow_html=True)
 # ---------------------------------------------------------
 
 # 2. Sidebar Pengaturan Mode

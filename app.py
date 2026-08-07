@@ -17,6 +17,29 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
+# 1.5. Cek Parameter URL Rahasia (HANYA Sembunyikan Tombol GitHub)
+# ---------------------------------------------------------
+query_params = st.query_params
+is_admin = query_params.get("admin") == "true"
+
+if not is_admin:
+    st.markdown(
+        """
+        <style>
+        /* Sembunyikan hanya ikon/link yang menuju ke GitHub */
+        a[href*="github.com"] {
+            display: none !important;
+        }
+        /* Sembunyikan tombol Star/Fork GitHub bawaan Streamlit (jika ada) */
+        button[title*="GitHub"], a[title*="GitHub"] {
+            display: none !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# ---------------------------------------------------------
 # 2. CSS Kustom Utuh (Sudah Diperbaiki)
 # ---------------------------------------------------------
 st.markdown(

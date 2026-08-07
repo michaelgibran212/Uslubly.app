@@ -114,19 +114,30 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+import base64
+
+# Function untuk membaca GIF lokal menjadi Base64
+def get_base64_gif(gif_path):
+    with open(gif_path, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode("utf-8")
+
 # ---------------------------------------------------------
-# Header Ringkas: Logo Animasi GIF (HTML Render) + Deskripsi
+# Header Ringkas: Logo Animasi GIF (Base64) + Deskripsi
 # ---------------------------------------------------------
 col_logo, col_desc = st.columns([2, 5])
 
 with col_logo:
-    # Menggunakan HTML img agar GIF dipaksa berputar terus di browser
-    st.markdown(
-        '<img src="app/static/logo_animasi.gif" width="180">', 
-        unsafe_allow_html=True
-    )
-    # ATAU jika file GIF ada di folder utama repositori:
-    # st.image("logo_animasi.gif", width=180)
+    try:
+        # Membaca file logo_animasi.gif dari root folder repositori
+        gif_base64 = get_base64_gif("logo_animasi.gif")
+        st.markdown(
+            f'<img src="data:image/gif;base64,{gif_base64}" width="180">',
+            unsafe_allow_html=True
+        )
+    except Exception:
+        # Cadangan jika file GIF tidak ditemukan
+        st.image("logo.png", width=180)
 
 with col_desc:
     st.markdown("<br>", unsafe_allow_html=True)

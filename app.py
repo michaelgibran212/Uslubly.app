@@ -260,14 +260,15 @@ if st.button("🔍 Menganalisis Teks"):
             except Exception as e:
                 st.error(f"Terjadi kesalahan saat memproses data: {e}")
                 # ---------------------------------------------------------
-# Survei Kepuasan & Kotak Saran (Google Form)
 # ---------------------------------------------------------
-st.divider()
+# Sidebar Kiri: Survei Kepuasan & Kotak Saran (Paling Bawah)
+# ---------------------------------------------------------
+st.sidebar.markdown("---")  # Garis pemisah rapi di sidebar
 
-st.info(
+st.sidebar.info(
     "⭐ **Bantu Kami Mengembangkan Uslubly!**\n\n"
-    "Bagaimana pengalaman Anda menggunakan Uslubly? Berikan penilaian dan saran Anda melalui "
-    "[**Survei Kepuasan & Kotak Saran Uslubly**](https://forms.gle/i53B72fqNEB7PCJx8)."
+    "Bagaimana penglaman anda? Berikan penilaian & saran Anda melalui:\n\n"
+    "👉 [**Survei Kepuasan & Kotak Saran**](PASTE_LINK_GOOGLE_FORM_ANDA_DI_SINI)"
 )
 
 # 6. Credit Line Footer

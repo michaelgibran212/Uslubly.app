@@ -1,14 +1,26 @@
-import os
-import json
+import base64
 import html
+import json
+import os
+
 import streamlit as st
 from google import genai
 from google.genai import types
 
-# 1. Konfigurasi Halaman & CSS Presisi
-st.set_page_config(page_title="Uslubly - Pengecek Teks Arab Akademik", layout="wide")
+# ---------------------------------------------------------
+# 1. Pengaturan Halaman & Favicon (WAJIB HANYA 1 KALI & PALING ATAS)
+# ---------------------------------------------------------
+st.set_page_config(
+    page_title="Uslubly - Pengecek Teks Arab Akademik",
+    page_icon="logo.webp",  # Favicon ikon tab browser
+    layout="wide",
+)
 
-st.markdown("""
+# ---------------------------------------------------------
+# 2. CSS Kustom Utuh (Sudah Diperbaiki)
+# ---------------------------------------------------------
+st.markdown(
+    """
     <style>
     /* 1. INPUT TEXTAREA & TEXTAREA HASIL SALIN (RATA KANAN PERFECT) */
     div[data-testid="stTextArea"] textarea {
@@ -112,15 +124,17 @@ st.markdown("""
         font-family: system-ui, -apple-system, sans-serif;
     }
     </style>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True,
+)
 
-import base64
 
 # Function untuk membaca GIF lokal menjadi Base64
 def get_base64_gif(gif_path):
     with open(gif_path, "rb") as f:
         data = f.read()
     return base64.b64encode(data).decode("utf-8")
+
 
 # ---------------------------------------------------------
 # Header Utama: Logo GIF Tengah Atas & Hirarki Teks
@@ -131,7 +145,8 @@ try:
 except Exception:
     logo_html = '<h1 style="text-align: center; color: #2e7d32;">Uslubly</h1>'
 
-st.markdown(f"""
+st.markdown(
+    f"""
     <div style="text-align: center; padding-bottom: 10px;">
         {logo_html}
         <h3 style="margin-top: 15px; margin-bottom: 5px; color: #1b5e20; font-weight: 700; font-size: 22px;">
@@ -141,28 +156,38 @@ st.markdown(f"""
             Sempurnakan tata bahasa, imla', dan mufradat karya ilmiah Anda secara otomatis.
         </p>
     </div>
-""", unsafe_allow_html=True)
-# ---------------------------------------------------------
+""",
+    unsafe_allow_html=True,
+)
 
-# 2. Sidebar Pengaturan Mode
+# ---------------------------------------------------------
+# Sidebar Pengaturan Mode
+# ---------------------------------------------------------
 st.sidebar.header("⚙️ Pengaturan Mode Analisis")
 
-# MENGAMBIL API KEY DARI SECRETS STREAMLIT / ENV AUTOMATIS
 api_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
 
-# Opsi Cadangan Manual di Sidebar (Hanya tampil jika Secrets Streamlit tidak terdeteksi)
 if not api_key:
-    api_key = st.sidebar.text_input("Masukkan Gemini API Key Anda:", type="password")
+    api_key = st.sidebar.text_input(
+        "Masukkan Gemini API Key Anda:", type="password"
+    )
 
 uslub_mode = st.sidebar.radio(
     "Pilih Mode Uslub (Gaya Bahasa):",
-    ("Uslub 'Ilmi (Akademik & Ilmiah)", "Uslub 'Adabi (Sastra / Puitis) [Tahap Pengembangan]"),
-    index=0
+    (
+        "Uslub 'Ilmi (Akademik & Ilmiah)",
+        "Uslub 'Adabi (Sastra / Puitis) [Tahap Pengembangan]",
+    ),
+    index=0,
 )
 
-enable_tashkil = st.sidebar.checkbox("Gunakan Harakat Lengkap (التشكيل)", value=True)
+enable_tashkil = st.sidebar.checkbox(
+    "Gunakan Harakat Lengkap (التشكيل)", value=True
+)
 
-# 3. System Prompt Super Kritis + Validasi Uslub Akademik
+# ---------------------------------------------------------
+# System Prompt
+# ---------------------------------------------------------
 SYSTEM_PROMPT = """
 Kamu adalah Uslubly, pakar & penyunting Bahasa Arab Akademik tingkat tinggi yang dirancang dan dikurasi oleh Ahmad Zakaria.
 Tugas Kamu: Menganalisis teks Arab masukan secara SANGAT KRITIS, MENYELURUH, dan DETAIL (meliputi Nahwu, Shorof, Imla', Pilihan Kata/Mufradat, dan Uslub Akademik 'Ilmi).
@@ -195,38 +220,48 @@ Aturan Penting:
    - Contoh penggunaannya dalam literatur/jurnal ilmiah Arab baku sebagai patokan validasi.
 """
 
-# 4. Form Input
-user_text = st.text_area("Masukkan Teks Bahasa Arab Akademik di Sini:", height=160, placeholder="اكتب النص العربي هنا...")
+# ---------------------------------------------------------
+# Form Input & Eksekusi
+# ---------------------------------------------------------
+user_text = st.text_area(
+    "Masukkan Teks Bahasa Arab Akademik di Sini:",
+    height=160,
+    placeholder="اكتب النص العربي هنا...",
+)
 
-# 5. Eksekusi Analisis
 if st.button("🔍 Menganalisis Teks"):
     if not api_key:
-        st.error("⚠️ API Key belum dikonfigurasi di Streamlit Secrets. Masukkan API Key di sidebar atau di pengaturannya!")
+        st.error(
+            "⚠️ API Key belum dikonfigurasi di Streamlit Secrets. Masukkan API Key di sidebar atau di pengaturannya!"
+        )
     elif not user_text.strip():
         st.warning("⚠️ Masukkan teks Arab terlebih dahulu.")
     elif "Tahap Pengembangan" in uslub_mode:
-        st.info("ℹ️ Mode Uslub 'Adabi saat ini sedang dalam tahap pengembangan. Silakan gunakan mode **Uslub 'Ilmi (Akademik & Ilmiah)**.")
+        st.info(
+            "ℹ️ Mode Uslub 'Adabi saat ini sedang dalam tahap pengembangan. Silakan gunakan mode **Uslub 'Ilmi (Akademik & Ilmiah)**."
+        )
     else:
-        with st.spinner("Uslubly sedang menganalisis & menyempurnakan uslub teks Arab..."):
+        with st.spinner(
+            "Uslubly sedang menganalisis & menyempurnakan uslub teks Arab..."
+        ):
             try:
                 client = genai.Client(api_key=api_key)
                 prompt_input = f"Gunakan Harakat Lengkap: {enable_tashkil}\nTeks Asli:\n{user_text}"
-                
+
                 response = client.models.generate_content(
-                    model='gemini-3.6-flash',
+                    model="gemini-3.6-flash",
                     contents=prompt_input,
                     config=types.GenerateContentConfig(
                         system_instruction=SYSTEM_PROMPT,
                         response_mime_type="application/json",
-                        temperature=0.0
-                    )
+                        temperature=0.0,
+                    ),
                 )
-                
+
                 result = json.loads(response.text)
                 plain_corrected = result.get("corrected_plain_text", "")
                 errors = result.get("errors", [])
 
-                # Penyusunan HTML Interaktif
                 annotated_html = plain_corrected
 
                 for err in errors:
@@ -237,31 +272,36 @@ if st.button("🔍 Menganalisis Teks"):
 
                     if corr_word and corr_word in annotated_html:
                         tooltip_html = f'<span class="corrected-tooltip">{corr_word}<span class="tooltip-content"><span class="badge-cat">{cat}</span><br><strong>Kata Asal:</strong> <span style="color:#c62828; text-decoration:line-through;">{orig_word}</span><br><strong>Diubah Menjadi:</strong> <span style="color:#2e7d32; font-weight:bold;">{corr_word}</span><br><hr style="margin:6px 0; border:0.5px solid #e0e0e0;">💡 <strong>Alasan Perbaikan:</strong><br>{reason}</span></span>'
-                        annotated_html = annotated_html.replace(corr_word, tooltip_html, 1)
+                        annotated_html = annotated_html.replace(
+                            corr_word, tooltip_html, 1
+                        )
 
                 annotated_html = html.unescape(annotated_html)
 
-                # Hasil Tampilan Interaktif
                 st.subheader("✨ Hasil Analisis Perbaikan Edukatif :")
-                st.caption("Arahkan kursor atau sentuh kata bergaris bawah hijau untuk melihat alasan perbaikan.")
-                st.markdown(f'<div class="arabic-interactive-container" dir="rtl">{annotated_html}</div>', unsafe_allow_html=True)
-                
+                st.caption(
+                    "Arahkan kursor atau sentuh kata bergaris bawah hijau untuk melihat alasan perbaikan."
+                )
+                st.markdown(
+                    f'<div class="arabic-interactive-container" dir="rtl">{annotated_html}</div>',
+                    unsafe_allow_html=True,
+                )
+
                 st.divider()
-                
-                # Hasil Teks Polos untuk Disalin
+
                 st.subheader("📋 Salin Teks Perbaikan Polos:")
                 st.text_area(
-                    "Teks Polos", 
-                    value=plain_corrected, 
-                    height=120, 
-                    label_visibility="collapsed"
+                    "Teks Polos",
+                    value=plain_corrected,
+                    height=120,
+                    label_visibility="collapsed",
                 )
 
             except Exception as e:
                 st.error(f"Terjadi kesalahan saat memproses data: {e}")
-                # ---------------------------------------------------------
-## ---------------------------------------------------------
-# Sidebar Kiri: Survei Kepuasan & Kotak Saran (Versi Ringkas)
+
+# ---------------------------------------------------------
+# Sidebar Kiri: Survei Kepuasan & Kotak Saran (Paling Bawah)
 # ---------------------------------------------------------
 st.sidebar.markdown("---")
 
@@ -277,9 +317,14 @@ st.sidebar.markdown(
         </p>
     </div>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
+# ---------------------------------------------------------
 # 6. Credit Line Footer
+# ---------------------------------------------------------
 st.markdown("---")
-st.markdown('<div class="app-footer">© 2026 Uslubly • Ahmad Zakaria • BSA UIN Sunan Kalijaga</div>', unsafe_allow_html=True)
+st.markdown(
+    '<div class="app-footer">© 2026 Uslubly • Ahmad Zakaria • BSA UIN Sunan Kalijaga</div>',
+    unsafe_allow_html=True,
+)
